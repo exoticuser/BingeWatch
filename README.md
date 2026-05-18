@@ -27,7 +27,7 @@ npm start
 npm run dev
 
 # 3. Open your browser
-# http://localhost:4000 (default)
+# http://localhost:3000
 ```
 
 ## Netlify Deployment

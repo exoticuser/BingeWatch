@@ -13,8 +13,10 @@ function normalizeSocketUrl(value) {
   }
 }
 
+const OUTPUT_DIR = path.join(__dirname, "..", "public", "js");
+const OUTPUT_FILE = "netlify-env.js";
 const socketUrl = normalizeSocketUrl(process.env.BINGEWATCH_SOCKET_URL);
-const outputPath = path.join(__dirname, "..", "public", "js", "netlify-env.js");
+const outputPath = path.join(OUTPUT_DIR, OUTPUT_FILE);
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 try {
