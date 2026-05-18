@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm ci"
+buildCommand = "echo 'No build step required'"
 
 [deploy]
 startCommand = "npm start"
