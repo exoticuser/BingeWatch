@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const SOCKET_URL_ENV_VAR = "BINGEWATCH_SOCKET_URL";
 
 function normalizeSocketUrl(value) {
   const raw = (value || "").trim();
@@ -15,7 +16,7 @@ function normalizeSocketUrl(value) {
 
 const OUTPUT_DIR = path.join(__dirname, "..", "public", "js");
 const OUTPUT_FILE = "netlify-env.js";
-const socketUrl = normalizeSocketUrl(process.env.BINGEWATCH_SOCKET_URL);
+const socketUrl = normalizeSocketUrl(process.env[SOCKET_URL_ENV_VAR]);
 const outputPath = path.join(OUTPUT_DIR, OUTPUT_FILE);
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
