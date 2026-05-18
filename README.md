@@ -17,6 +17,8 @@
 
 ## Quick Start
 
+### Local Development
+
 ```bash
 # 1. Install dependencies
 npm install
@@ -27,8 +29,31 @@ npm start
 npm run dev
 
 # 3. Open your browser
-# http://localhost:3000
+# http://localhost:4000
 ```
+
+### Deploy to Vercel
+
+```bash
+# 1. Push to GitHub
+git add .
+git commit -m "Deploy BingeWatch"
+git push
+
+# 2. Import your repo on vercel.com
+# https://vercel.com/new
+
+# 3. Click Deploy
+```
+
+Or use the Vercel CLI:
+
+```bash
+npm i -g vercel
+vercel
+```
+
+**Note:** Native WebSocket connections work seamlessly on Vercel with no additional configuration needed.
 
 ## How to Use
 
@@ -75,8 +100,8 @@ binge watch/
 
 ## Tech Stack
 
-- **Backend** — Node.js, Express, Socket.io
-- **Video Sync** — Socket.io events (play/pause/seek broadcast)
+- **Backend** — Node.js, Express, Native WebSocket API (ws package)
+- **Video Sync** — WebSocket JSON messages (play/pause/seek broadcast)
 - **Facecam** — Native WebRTC API (no extra libraries)
 - **Frontend** — Vanilla JS, CSS custom properties (no frameworks)
 
