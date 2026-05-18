@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BingeWatch — Watch Together</title>
+  <meta name="description" content="Watch videos and movies together with friends in real-time. No sign-up needed." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/landing.css" />
+</head>
+<body>
+
+  <!-- Animated background orbs -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="film-strip fs-left"></div>
+    <div class="film-strip fs-right"></div>
+  </div>
+
+  <main class="landing-wrap">
+
+    <!-- Hero -->
+    <header class="hero">
+      <div class="logo-mark">🎬</div>
+      <h1 class="brand">BingeWatch</h1>
+      <p class="hero-sub">Watch videos together with friends — perfectly synced, no account needed.</p>
+
+      <div class="badges">
+        <span class="badge">🔄 Synced Playback</span>
+        <span class="badge">💬 Live Chat</span>
+        <span class="badge">📹 Facecam</span>
+        <span class="badge">🔒 100% Anonymous</span>
+        <span class="badge">▶️ YouTube &amp; Direct Links</span>
+      </div>
+    </header>
+
+    <!-- Invited via link? Banner -->
+    <div class="invite-banner" id="invite-banner" style="display:none">
+      <span>🎉 You've been invited to a watch party!</span>
+      <span class="invite-room" id="invite-room-display"></span>
+    </div>
+
+    <!-- Action cards -->
+    <div class="cards-grid">
+
+      <!-- Create Room -->
+      <div class="card card-create">
+        <div class="card-accent-line create-line"></div>
+        <div class="card-icon">✨</div>
+        <h2>Create a Room</h2>
+        <p>Start a new watch party instantly and share the code with anyone.</p>
+
+        <div class="field">
+          <label for="create-name">Your Name <span class="optional">(optional)</span></label>
+          <input id="create-name" type="text" placeholder="Leave blank for a random name" maxlength="24" autocomplete="off" />
+        </div>
+
+        <button class="btn btn-red" id="create-btn">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/></svg>
+          Create Watch Party
+        </button>
+      </div>
+
+      <div class="divider-or"><span>or</span></div>
+
+      <!-- Join Room -->
+      <div class="card card-join">
+        <div class="card-accent-line join-line"></div>
+        <div class="card-icon">🚀</div>
+        <h2>Join a Room</h2>
+        <p>Enter the 6-character room code your friend shared with you.</p>
+
+        <div class="field">
+          <label for="join-code">Room Code <span class="required">*</span></label>
+          <input id="join-code" type="text" placeholder="e.g. ABC123" maxlength="6" autocomplete="off" spellcheck="false" />
+        </div>
+
+        <div class="field">
+          <label for="join-name">Your Name <span class="optional">(optional)</span></label>
+          <input id="join-name" type="text" placeholder="Leave blank for a random name" maxlength="24" autocomplete="off" />
+        </div>
+
+        <button class="btn btn-purple" id="join-btn">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M3 10a7 7 0 1114 0 7 7 0 01-14 0zm11.707-1.293a1 1 0 00-1.414-1.414L10 10.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          Join Party
+        </button>
+      </div>
+
+    </div><!-- /cards-grid -->
+
+    <!-- How it works -->
+    <section class="how-section">
+      <h3 class="how-title">How it works</h3>
+      <ol class="steps">
+        <li class="step">
+          <div class="step-n">1</div>
+          <div class="step-body">
+            <strong>Create or join a room</strong>
+            <span>No account needed — just click and go!</span>
+          </div>
+        </li>
+        <div class="step-connector"></div>
+        <li class="step">
+          <div class="step-n">2</div>
+          <div class="step-body">
+            <strong>Paste a video URL</strong>
+            <span>YouTube links or any direct .mp4 / .webm URL.</span>
+          </div>
+        </li>
+        <div class="step-connector"></div>
+        <li class="step">
+          <div class="step-n">3</div>
+          <div class="step-body">
+            <strong>Watch together in sync</strong>
+            <span>Play, pause, and seek — everyone stays in sync automatically.</span>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <footer class="landing-footer">
+      Built for watch parties &nbsp;·&nbsp; No data stored &nbsp;·&nbsp; 100% anonymous
+    </footer>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/landing.js"></script>
+</body>
+</html>
