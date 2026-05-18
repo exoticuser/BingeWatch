@@ -17,7 +17,13 @@ const socketUrl = normalizeSocketUrl(process.env.BINGEWATCH_SOCKET_URL);
 const outputPath = path.join(__dirname, "..", "public", "js", "netlify-env.js");
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-fs.writeFileSync(
-  outputPath,
-  `window.BINGEWATCH_SOCKET_URL = ${JSON.stringify(socketUrl)};\n`,
-);
+try {
+  fs.writeFileSync(
+    outputPath,
+    `window.BINGEWATCH_SOCKET_URL = ${JSON.stringify(socketUrl)};\n`,
+  );
+  console.log(`Generated ${outputPath}`);
+} catch (err) {
+  console.error(`Failed to generate ${outputPath}:`, err);
+  process.exit(1);
+}
