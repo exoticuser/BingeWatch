@@ -53,7 +53,7 @@ npm i -g vercel
 vercel
 ```
 
-**Note:** Socket.io connections work seamlessly on Vercel with WebSocket upgrade support enabled by default.
+**Note:** Native WebSocket connections work seamlessly on Vercel with no additional configuration needed.
 
 ## How to Use
 
@@ -100,8 +100,8 @@ binge watch/
 
 ## Tech Stack
 
-- **Backend** — Node.js, Express, Socket.io
-- **Video Sync** — Socket.io events (play/pause/seek broadcast)
+- **Backend** — Node.js, Express, Native WebSocket API (ws package)
+- **Video Sync** — WebSocket JSON messages (play/pause/seek broadcast)
 - **Facecam** — Native WebRTC API (no extra libraries)
 - **Frontend** — Vanilla JS, CSS custom properties (no frameworks)
 
