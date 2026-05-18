@@ -1,8 +1,9 @@
 [build]
 builder = "NIXPACKS"
+buildCommand = "npm ci"
 
 [deploy]
-startCommand = "node server.js"
+startCommand = "npm start"
 healthcheckPath = "/"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
