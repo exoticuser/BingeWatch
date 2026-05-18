@@ -17,6 +17,8 @@
 
 ## Quick Start
 
+### Local Development
+
 ```bash
 # 1. Install dependencies
 npm install
@@ -27,8 +29,31 @@ npm start
 npm run dev
 
 # 3. Open your browser
-# http://localhost:3000
+# http://localhost:4000
 ```
+
+### Deploy to Vercel
+
+```bash
+# 1. Push to GitHub
+git add .
+git commit -m "Deploy BingeWatch"
+git push
+
+# 2. Import your repo on vercel.com
+# https://vercel.com/new
+
+# 3. Click Deploy
+```
+
+Or use the Vercel CLI:
+
+```bash
+npm i -g vercel
+vercel
+```
+
+**Note:** Socket.io connections work seamlessly on Vercel with WebSocket upgrade support enabled by default.
 
 ## How to Use
 

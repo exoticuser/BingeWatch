@@ -5,13 +5,13 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/socket.io/(.*)",
+      "dest": "/server.js"
+    },
     {
       "src": "/public/(.*)",
       "dest": "/public/$1"
