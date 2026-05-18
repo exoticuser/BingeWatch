@@ -1,3 +1,3 @@
 [build]
   publish = "public"
-  command = "node -e \"const fs=require('fs');const v=process.env.BINGEWATCH_SOCKET_URL||'';fs.mkdirSync('public/js',{recursive:true});fs.writeFileSync('public/js/netlify-env.js','window.BINGEWATCH_SOCKET_URL = '+JSON.stringify(v)+';\\\\n');\""
+  command = "node scripts/generate-netlify-env.js"
