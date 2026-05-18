@@ -88,6 +88,9 @@ This repo now includes `netlify.toml` for Netlify deployment.
 2. Keep the publish directory as `public`
 3. Deploy
 
+> Note: this app uses a Socket.io Node backend (`server.js`) for rooms, chat, and sync.
+> Netlify static hosting is suitable for the frontend; the realtime backend should be hosted on a Node platform (for example Railway/Render/VPS).
+
 ## License
 
 MIT
