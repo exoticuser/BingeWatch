@@ -16,11 +16,6 @@ if (!ROOM_ID) {
 }
 
 // ── Socket ───────────────────────────────────────────
-function getSocketServerUrl() {
-  const configured = (window.BINGEWATCH_SOCKET_URL || "").trim();
-  return configured || window.location.origin;
-}
-
 const socket = io(getSocketServerUrl());
 
 // ── State ────────────────────────────────────────────

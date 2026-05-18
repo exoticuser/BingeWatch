@@ -2,11 +2,6 @@
    BingeWatch — Landing Page
    ════════════════════════════════════════════════════ */
 
-function getSocketServerUrl() {
-  const configured = (window.BINGEWATCH_SOCKET_URL || "").trim();
-  return configured || window.location.origin;
-}
-
 const socket = io(getSocketServerUrl());
 
 // ── Helpers ─────────────────────────────────────────
