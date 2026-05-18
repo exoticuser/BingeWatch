@@ -16,7 +16,12 @@ if (!ROOM_ID) {
 }
 
 // ── Socket ───────────────────────────────────────────
-const socket = io();
+function getSocketServerUrl() {
+  const configured = (window.BINGEWATCH_SOCKET_URL || "").trim();
+  return configured || window.location.origin;
+}
+
+const socket = io(getSocketServerUrl());
 
 // ── State ────────────────────────────────────────────
 let me = null; // { id, username, hasCamera }

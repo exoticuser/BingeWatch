@@ -27,8 +27,19 @@ npm start
 npm run dev
 
 # 3. Open your browser
-# http://localhost:3000
+# http://localhost:4000
 ```
+
+## Netlify Deployment
+
+Netlify can host the frontend (`public/`) while your Node.js + Socket.io server runs separately (for example on Railway/Render/Fly).
+
+1. Deploy this repo to Netlify (it uses `netlify.toml` and publishes `public/`).
+2. In Netlify Site Settings → Environment Variables, set:
+   - `BINGEWATCH_SOCKET_URL=https://your-backend-domain.com`
+3. Trigger a redeploy.
+
+The frontend will then connect Socket.io to `BINGEWATCH_SOCKET_URL`. If unset, it falls back to the current origin.
 
 ## How to Use
 

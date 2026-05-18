@@ -1,0 +1,1 @@
+window.BINGEWATCH_SOCKET_URL = "";
