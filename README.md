@@ -27,7 +27,7 @@ npm start
 npm run dev
 
 # 3. Open your browser
-# http://localhost:3000
+# http://localhost:4000
 ```
 
 ## How to Use
@@ -79,6 +79,14 @@ binge watch/
 - **Video Sync** — Socket.io events (play/pause/seek broadcast)
 - **Facecam** — Native WebRTC API (no extra libraries)
 - **Frontend** — Vanilla JS, CSS custom properties (no frameworks)
+
+## Netlify Deployment
+
+This repo now includes `netlify.toml` for Netlify deployment.
+
+1. Connect this repository in Netlify
+2. Keep the publish directory as `public`
+3. Deploy
 
 ## License
 

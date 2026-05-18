@@ -288,9 +288,22 @@ function detectType(url) {
   return "html5"; // try as direct for other URLs
 }
 
+function isAllowedVideoUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function loadVideo(url, emit = true) {
   if (!url) return;
   urlInput.value = url;
+  if (!isAllowedVideoUrl(url)) {
+    toast("Only http(s) video links are supported.", "error");
+    return;
+  }
   const type = detectType(url);
   if (type === "youtube") loadYouTube(url);
   else loadHTML5(url);
@@ -706,7 +719,7 @@ function addCamTile(id, stream, label, isLocal) {
 
   const vid = document.createElement("video");
   vid.autoplay = true;
-  vid.playsinline = true;
+  vid.playsInline = true;
   vid.muted = isLocal; // mute self to prevent echo
   vid.srcObject = stream;
 

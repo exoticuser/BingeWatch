@@ -17,6 +17,15 @@ app.use(express.static(path.join(__dirname, "public")));
 const rooms = new Map();
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
+function normalizeRoomId(value) {
+  if (typeof value !== "string") return "";
+  return value.toUpperCase().trim();
+}
+
+function normalizeTime(value) {
+  const num = Number(value);
+  return Number.isFinite(num) && num >= 0 ? num : 0;
+}
 
 function generateRoomId() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no ambiguous chars
@@ -79,17 +88,21 @@ io.on("connection", (socket) => {
       createdAt: Date.now(),
     });
 
-    callback({ success: true, roomId });
+    if (typeof callback === "function") {
+      callback({ success: true, roomId });
+    }
   });
 
   // ── Check if room exists ──
   socket.on("check-room", (roomId, callback) => {
-    callback({ exists: rooms.has(roomId.toUpperCase().trim()) });
+    if (typeof callback !== "function") return;
+    callback({ exists: rooms.has(normalizeRoomId(roomId)) });
   });
 
   // ── Join a room ──
-  socket.on("join-room", ({ roomId, username }, callback) => {
-    roomId = roomId.toUpperCase().trim();
+  socket.on("join-room", ({ roomId, username } = {}, callback) => {
+    if (typeof callback !== "function") return;
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId)) {
       return callback({ success: false, error: "Room not found" });
     }
@@ -120,59 +133,74 @@ io.on("connection", (socket) => {
   });
 
   // ── Video Sync ──
-  socket.on("play-video", ({ roomId, currentTime }) => {
+  socket.on("play-video", ({ roomId, currentTime } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId)) return;
     const room = rooms.get(roomId);
-    room.videoState = { isPlaying: true, currentTime, updatedAt: Date.now() };
+    const nextTime = normalizeTime(currentTime);
+    room.videoState = { isPlaying: true, currentTime: nextTime, updatedAt: Date.now() };
     socket
       .to(roomId)
-      .emit("play-video", { currentTime, by: userData?.username });
+      .emit("play-video", { currentTime: nextTime, by: userData?.username });
   });
 
-  socket.on("pause-video", ({ roomId, currentTime }) => {
+  socket.on("pause-video", ({ roomId, currentTime } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId)) return;
     const room = rooms.get(roomId);
-    room.videoState = { isPlaying: false, currentTime, updatedAt: Date.now() };
+    const nextTime = normalizeTime(currentTime);
+    room.videoState = { isPlaying: false, currentTime: nextTime, updatedAt: Date.now() };
     socket
       .to(roomId)
-      .emit("pause-video", { currentTime, by: userData?.username });
+      .emit("pause-video", { currentTime: nextTime, by: userData?.username });
   });
 
-  socket.on("seek-video", ({ roomId, currentTime }) => {
+  socket.on("seek-video", ({ roomId, currentTime } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId)) return;
-    rooms.get(roomId).videoState.currentTime = currentTime;
+    const nextTime = normalizeTime(currentTime);
+    rooms.get(roomId).videoState.currentTime = nextTime;
     rooms.get(roomId).videoState.updatedAt = Date.now();
-    socket.to(roomId).emit("seek-video", { currentTime });
+    socket.to(roomId).emit("seek-video", { currentTime: nextTime });
   });
 
-  socket.on("change-video", ({ roomId, url }) => {
+  socket.on("change-video", ({ roomId, url } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId)) return;
+    const nextUrl = typeof url === "string" ? url.trim().slice(0, 2048) : "";
+    if (!nextUrl) return;
     const room = rooms.get(roomId);
-    room.videoUrl = url;
+    room.videoUrl = nextUrl;
     room.videoState = {
       isPlaying: false,
       currentTime: 0,
       updatedAt: Date.now(),
     };
-    io.to(roomId).emit("video-changed", { url, by: userData?.username });
+    io.to(roomId).emit("video-changed", { url: nextUrl, by: userData?.username });
   });
 
   // ── Chat ──
-  socket.on("chat-message", ({ roomId, message }) => {
+  socket.on("chat-message", ({ roomId, message } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId) || !userData) return;
+    const cleanMessage =
+      typeof message === "string" ? message.trim().slice(0, 300) : "";
+    if (!cleanMessage) return;
     const msg = {
       id: `${Date.now()}-${socket.id}`,
       userId: socket.id,
       username: userData.username,
-      message: message.toString().trim().slice(0, 300),
+      message: cleanMessage,
       timestamp: Date.now(),
     };
     io.to(roomId).emit("chat-message", msg);
   });
 
   // ── Emoji Reactions ──
-  socket.on("reaction", ({ roomId, emoji }) => {
+  socket.on("reaction", ({ roomId, emoji } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId) || !userData) return;
+    if (typeof emoji !== "string" || emoji.length > 8) return;
     socket.to(roomId).emit("reaction", { emoji, username: userData.username });
   });
 
@@ -193,14 +221,15 @@ io.on("connection", (socket) => {
     io.to(targetId).emit("webrtc-ice", { fromId: socket.id, candidate });
   });
 
-  socket.on("camera-toggle", ({ roomId, enabled }) => {
+  socket.on("camera-toggle", ({ roomId, enabled } = {}) => {
+    roomId = normalizeRoomId(roomId);
     if (!rooms.has(roomId) || !userData) return;
-    userData.hasCamera = enabled;
+    userData.hasCamera = Boolean(enabled);
     const users = Array.from(rooms.get(roomId).users.values());
     io.to(roomId).emit("camera-toggled", {
       userId: socket.id,
       username: userData.username,
-      enabled,
+      enabled: Boolean(enabled),
       users,
     });
   });

@@ -1,0 +1,13 @@
+[build]
+  command = "echo 'No build step required'"
+  publish = "public"
+
+[[redirects]]
+  from = "/"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/room"
+  to = "/room.html"
+  status = 200
