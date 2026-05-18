@@ -7,11 +7,20 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" },
-  pingTimeout: 60000,
+  pingInterval: 25000, // Send ping every 25 seconds
+  pingTimeout: 20000,  // Wait 20 seconds for pong before disconnecting
+  transports: ["websocket", "polling"], // Prefer WebSocket, fallback to polling
+  maxHttpBufferSize: 1e6, // 1MB max message size
+  allowEIO3: true, // Support older clients
 });
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
+
+// Health check endpoint (prevents idle timeout)
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", rooms: rooms.size, timestamp: Date.now() });
+});
 
 // In-memory room storage
 const rooms = new Map();

@@ -16,7 +16,13 @@ if (!ROOM_ID) {
 }
 
 // ── Socket ───────────────────────────────────────────
-const socket = io();
+const socket = io({
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  reconnectionAttempts: Infinity,
+  transports: ["websocket", "polling"],
+});
 
 // ── State ────────────────────────────────────────────
 let me = null; // { id, username, hasCamera }
@@ -29,6 +35,7 @@ let isCam = false; // local camera on?
 let localStream = null;
 const peers = new Map(); // peerId -> RTCPeerConnection
 const iceQueue = new Map(); // peerId -> [RTCIceCandidate] (buffered before remoteDesc)
+let isConnected = false; // Socket.io connection status
 
 // Guard flag: set true before programmatic video changes to prevent echo
 let remoteCtrl = false;
@@ -779,7 +786,31 @@ sidebarToggle.addEventListener("click", () => {
 // ════════════════════════════════════════════════════
 // SOCKET — CONNECTION STATE
 // ════════════════════════════════════════════════════
-socket.on("disconnect", () =>
-  toast("Connection lost — trying to reconnect…", "error", 8000),
-);
-socket.on("reconnect", () => toast("Reconnected! ✅", "success"));
+socket.on("connect", () => {
+  isConnected = true;
+  console.log("[v0] Socket connected:", socket.id);
+});
+
+socket.on("disconnect", (reason) => {
+  isConnected = false;
+  console.log("[v0] Socket disconnected:", reason);
+  toast("Connection lost — reconnecting…", "error", 10000);
+});
+
+socket.on("reconnect", () => {
+  isConnected = true;
+  toast("Reconnected! ✅", "success");
+  console.log("[v0] Socket reconnected");
+});
+
+socket.on("reconnect_attempt", () => {
+  console.log("[v0] Attempting to reconnect...");
+});
+
+socket.on("reconnect_error", (error) => {
+  console.log("[v0] Reconnection error:", error.message);
+});
+
+socket.on("connect_error", (error) => {
+  console.log("[v0] Connection error:", error.message);
+});

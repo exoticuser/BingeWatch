@@ -27,7 +27,23 @@
   "functions": {
     "server.js": {
       "memory": 1024,
-      "maxDuration": 60
+      "maxDuration": 900,
+      "runtime": "nodejs20.x"
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/socket.io/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Connection",
+          "value": "Upgrade"
+        }
+      ]
+    }
+  ]
 }
